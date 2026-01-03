@@ -54,6 +54,22 @@ class Reolink(UnifiCamBase):
             help="Stream profile to use for the lower quality stream",
         )
 
+        parser.add_argument(
+            "--rtsp-url",
+            "-r",
+            default=None,
+            type=str,
+            help="Override RTSP URL for the main stream (video1)",
+        )
+
+        parser.add_argument(
+            "--rtsp-url-sub",
+            "-R",
+            default=None,
+            type=str,
+            help="Override RTSP URL for the substream (video2)",
+        )
+
     def get_stream_info(self, camera) -> tuple[int, int]:
         info = camera.get_recording_encoding()
         return (
@@ -138,8 +154,14 @@ class Reolink(UnifiCamBase):
 
     async def get_stream_source(self, stream_index: str) -> str:
         if stream_index == "video1":
+            # Use custom RTSP URL if provided, otherwise build default
+            if self.args.rtsp_url:
+                return self.args.rtsp_url
             stream = self.args.stream
         else:
+            # Use custom substream RTSP URL if provided, otherwise build default
+            if self.args.rtsp_url_sub:
+                return self.args.rtsp_url_sub
             stream = self.args.substream
 
         return (
