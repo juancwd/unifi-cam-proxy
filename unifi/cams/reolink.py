@@ -59,7 +59,7 @@ class Reolink(UnifiCamBase):
             "-r",
             default=None,
             type=str,
-            help="Override RTSP URL for the main stream (video1)",
+            help="Override RTSP URL for the main stream (video1)", 
         )
 
         parser.add_argument(
